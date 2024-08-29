@@ -16,9 +16,7 @@ else {
     _ = app.UseHttpsRedirection();
 }
 
-app.MapPost("/bebra", static async (CreateExampleRequest request, IMediator mediator) => {
-    return await mediator.Send(request);
-});
+app.MapPost("/bebra", static async (CreateExampleRequest request, IMediator mediator) => await mediator.Send(request));
 
 app.Run();
 
