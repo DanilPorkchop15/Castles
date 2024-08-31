@@ -1,6 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-
-namespace Castles.Domain.Entities.User;
+﻿namespace Castles.Domain.Entities.User;
 
 public enum Gender {
     Male,
@@ -10,22 +8,33 @@ public enum Gender {
 
 public enum Role {
     User,
-    Premuim,
     Admin,
+    Subcription,
 }
 
-public record class User {
-    private User() { }
-    public UInt64 Id { get; init; }
-    public required String Username { get; init; }
-    public static Result<User> Create(
-            String username,
-            String email,
-            String password,
-            String status,
-            Gender gender = Gender.Unset,
-            Role role = Role.User) {
+public record class ImageCategory(Int32 Id, String Name);
 
-    }
-}
+public record class User(
+    Int32 Id,
+    String Username,
+    String Email,
+    String Password,
+    List<Image> UserImages,
+    String Status = "",
+    Gender Gender = Gender.Unset,
+    Role Role = Role.User
+);
+
+public record class Image(
+    Int32 Id,
+    // examples: 
+    //  Foler = "/" - root, image will be shown on main screen; 
+    //  Folder = "/bebra/" - on main screen will be shown folder 'bebra' which contains the file.
+    //'/' in the end is required.
+    String Folder,
+    String Name,
+    ImageCategory Category
+) {
+    public String FullName => Folder + Name;
+};
 
