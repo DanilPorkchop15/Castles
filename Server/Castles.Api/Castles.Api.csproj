@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Castles.Logic\Castles.Logic.csproj" />
+    <ProjectReference Include="..\Castles.Persistence\Castles.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

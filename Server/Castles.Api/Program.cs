@@ -1,6 +1,8 @@
 ﻿using Castles.Logic;
-using Castles.Logic.ExampleUseCase.Commands.CreateExample;
+using Castles.Logic.Images.Commands.CreateImage;
 using MediatR;
+using Castles.Persistence;
+using Castles.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,13 +18,15 @@ else {
     _ = app.UseHttpsRedirection();
 }
 
-app.MapPost("/bebra", static async (CreateExampleRequest request, IMediator mediator) => await mediator.Send(request));
+app.MapPost("/bebra", static async (CreateImageRequest request, IMediator mediator) => await mediator.Send(request));
 
 app.Run();
 
 static void ConfigureServices(WebApplicationBuilder builder) {
     _ = builder.Services
+        .AddPersistenceLayer()
         .AddEndpointsApiExplorer()
         .AddSwaggerGen()
+        .AddServiceLayer()
         .AddLogicLayer();
 }
