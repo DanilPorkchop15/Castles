@@ -1,4 +1,21 @@
 services:
+  server:
+    container_name: castles-server
+    build:
+      context: ./Server/
+      dockerfile: ./dockerfile
+    ports:
+      - "1488:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - CASTLES_MINIO_SECRET_KEY=minioadmin
+      - CASTLES_MINIO_ACCESS_KEY=minioadmin
+    depends_on:
+      - postgres
+      - pgadmin
+      - minio
+      - redis
+
   postgres:
     container_name: castles-pg
     image: postgres

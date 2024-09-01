@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+COPY *.sln .
+COPY Castles.Api/*.csproj Castles.Api/
+COPY Castles.Domain/*.csproj Castles.Domain/
+COPY Castles.Logic/*.csproj Castles.Logic/
+COPY Castles.Persistence/*.csproj Castles.Persistence/
+COPY Castles.Service/*.csproj Castles.Service/
+
+RUN dotnet restore
+
+COPY . .
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "Castles.Api.dll"]
