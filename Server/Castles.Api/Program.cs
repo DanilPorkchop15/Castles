@@ -3,6 +3,7 @@ using Castles.Logic.Images.Commands.CreateImage;
 using MediatR;
 using Castles.Persistence;
 using Castles.Service;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,18 +16,18 @@ if (app.Environment.IsDevelopment()) {
     _ = app.UseSwaggerUI();
 }
 else {
-    _ = app.UseHttpsRedirection();
+    // _ = app.UseHttpsRedirection();
 }
 
-app.MapPost("/bebra", static async (CreateImageRequest request, IMediator mediator) => await mediator.Send(request));
+app.MapPost("/bebra", static async ([FromForm] CreateImageRequest request, IMediator mediator) => await mediator.Send(request)).DisableAntiforgery();
 
 app.Run();
 
 static void ConfigureServices(WebApplicationBuilder builder) {
     _ = builder.Services
-        .AddPersistenceLayer()
         .AddEndpointsApiExplorer()
         .AddSwaggerGen()
+        .AddPersistenceLayer()
         .AddServiceLayer()
         .AddLogicLayer();
 }

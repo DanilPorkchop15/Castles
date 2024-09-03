@@ -1,20 +1,21 @@
 ﻿using Castles.Domain.Entities.Image;
-using Castles.Logic.Images.Commands.CreateImage;
+using Castles.Logic.ExampleUseCase.Commands.CreateImage;
 using Castles.Persistence.Repository;
 using Castles.Service;
 using MapsterMapper;
 using MediatR;
 
-namespace Castles.Logic.ExampleUseCase.Commands.CreateImage;
+namespace Castles.Logic.Images.Commands.CreateImage;
 
-public class CreateImageCommandHandler(IMapper mapper, ImageGenerator imageGenerator, ImageRepository imageRepository) : IRequestHandler<CreateImageRequest, CreateImageResponse> {
-    public Task<CreateImageResponse> Handle(CreateImageRequest request, CancellationToken cancellationToken) {
-        var image = mapper.Map<Image>(request);
+public class CreateImageCommandHandler(IMapper mapper, FileStorage fileStorage, ImageGenerator imageGenerator, ImageRepository imageRepository) : IRequestHandler<CreateImageRequest, CreateImageResponse> {
+    public async Task<CreateImageResponse> Handle(CreateImageRequest request, CancellationToken cancellationToken) {
+        // var image = mapper.Map<Image>(request); //todo
+        var image = new Image(0, request.Folder, request.Name, new ImageCategory(0, request.CategoryName));
         var content = request.Content;
-
-        /* ну кароче чота тут саздается да понял да разные там вещи да + запросы к базе данных */
-
-        return Task.FromResult(new CreateImageResponse(Results.Ok("bebra")));
+        image = await imageGenerator.GenerateAsync(image, content);
+        // await imageRepository.InsertImageAsync(image with { Content = null });
+        await fileStorage.Upload(image.Content!, image.FullName, Random.Shared.Next());
+        return new CreateImageResponse(Results.Ok("Bebra"));
     }
 }
 

@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions {
                         .Build();
         });
         _ = services.AddScoped<ImageGenerator>();
+        _ = services.AddScoped<FileStorage>();
         return services;
     }
 }

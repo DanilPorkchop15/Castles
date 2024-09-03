@@ -8,8 +8,8 @@ public record class Image(
     //'/' in the end is required.
     String Folder,
     String Name,
-    ImageCategory Category
+    ImageCategory Category,
+    Byte[]? Content = null
 ) {
     public String FullName => Folder + Name;
 };
-
